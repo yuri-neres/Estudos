@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-void registrarMacro(int gramasProteina){
+void registrarMacro(float gramasProteina){
     std::cout << "Proteina isolada registrada: " << gramasProteina << "g.\n---\n";
 }
 void registrarMacro(float gramasCarbo, float gramasGordura){
@@ -12,7 +12,7 @@ float absorcaoProteica(float gramas, int horas){
     if (horas > 0){return absorcaoProteica(gramas * 0.90, horas - 1);}
     return 0;
 }
-void fecharDia(std::vector<int> &prots, float &caloriasTotais){
+void fecharDia(std::vector<float> &prots, float &caloriasTotais){
     float soma = 0;
     for (int i = 0; i < prots.size(); i++){
         soma += prots[i];
@@ -29,9 +29,9 @@ int main() {
         {50.0, 80.0, 65.5},
         {35.0, 65.0, 55.0},
         {40.5, 70.0, 50.0}
-    };
-    int opcao = 0, temporario = 0, horas;
-    std::vector<int> proteinasDiarias = {};
+    }, caloriasTotais = 0, temporario = 0;
+    int opcao = 0, horas;
+    std::vector<float> proteinasDiarias = {};
 
     do{
         std::cout << "--- MENU ---\n1. Consultar plano semanal\n2. Inserir proteinas avulsas\n3. Calcular taxa de absorcao\n4. Fechar dia atual\n0. Dormir (Sair do aplicativo)\n";
@@ -66,18 +66,25 @@ int main() {
             std::cin >> temporario;
             std::cout << "Digite o numero de horas:\n";
             std::cin >> horas;
-            std::cout << absorcaoProteica(temporario, horas);
+            std::cout << "---\nTaxa: " << absorcaoProteica(temporario, horas) << "g/h.\n";
             break;
         case 4:
-
+            if (proteinasDiarias.size() > 0){
+                fecharDia(proteinasDiarias, caloriasTotais);
+                std::cout << "Caloria total de proteina ingerida: " << caloriasTotais << "kcal.\n";
+                proteinasDiarias.clear();
+                caloriasTotais = 0;
+                break;
+            } else{
+                std::cout << "Nenhum macro registrado! Retornando...\n";
+            }
             break;
         case 0:
-
+            std::cout << "Boa noite! Fechando app...";
             break;
         default:
-            std::cout << "Opcao Invalida!";
+            std::cout << "Opcao Invalida!\n";
             break;
         }
     } while (opcao != 0);
-    
 }
